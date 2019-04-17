@@ -82,3 +82,10 @@ dist
 
 # Service worker
 sw.*
+
+# Environment
+config/*
+
+# Firebase
+.firebase/
+firebase.config.js

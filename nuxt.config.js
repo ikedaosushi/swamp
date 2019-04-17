@@ -33,30 +33,46 @@ export default {
   ** Global CSS
   */
   css: [
-    '~/assets/style/app.styl'
+    '~/assets/style/app.styl',
+    "firebaseui/dist/firebaseui.css"
   ],
 
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '@/plugins/vuetify'
+    '@/plugins/vuetify',
+    '@/plugins/firebase',
   ],
 
   /*
   ** Nuxt.js modules
   */
   modules: [
-    // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    '@nuxtjs/proxy',
+    [
+      '@nuxtjs/dotenv',
+      { filename: process.env.NODE_ENV !== 'production' ? "./config/.env.dev" : "./config/.env.prod" }
+    ]
   ],
   /*
   ** Axios module configuration
   */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
+    baseURL: 'https://accounts.spotify.com',
+    proxyHeaders: false,
+    credentials: false
   },
-
+  proxy: {
+    '/account_spotify/': { target: 'https://accounts.spotify.com', pathRewrite: {'^/account_spotify/': ''} },
+    '/api_spotify/': { target: 'https://api.spotify.com', pathRewrite: {'^/api_spotify/': ''} },
+    changeOrigin: true
+  },
+  router: {
+    middleware: ['authenticated']
+  },
   /*
   ** Build configuration
   */
