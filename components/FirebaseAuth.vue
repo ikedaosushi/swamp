@@ -33,8 +33,6 @@ export default {
           },
           signInSuccessUrl: '/',
           signInFlow: 'popup',
-          // tosUrl: '/tos',
-          // privacyPolicyUrl: '/privacy-policy',
         }
 
         ui.start('#firebaseui-auth-container', config)

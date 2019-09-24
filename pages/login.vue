@@ -1,9 +1,5 @@
-<template>
-  <div class="login">
-    <no-ssr>
-      <firebase-auth />
-    </no-ssr>
-  </div>
+<template lang="pug">
+  firebase-auth
 </template>
 
 <script>
@@ -12,13 +8,6 @@ import { mapState, mapGetters, mapActions } from "vuex";
 
 export default {
   name: 'Login',
-  created() {
-  },
-  computed: {
-    ...mapGetters("auth", [
-      "isLoggedIn"
-    ])
-  },
   components: {
     FirebaseAuth
   }

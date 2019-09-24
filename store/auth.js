@@ -3,11 +3,13 @@ import { auth } from '~/plugins/firebase'
 export const state = () => ({
     status: "",
     token: localStorage.getItem('token') || '',
-    username: ""
+    username: "",
+    uid: ""
 })
 
 export const getters = {
-    isLoggedIn: state =>  state.status === "loggedIn"
+    isLoggedIn: state =>  state.status === "loggedIn",
+    uid: state => state.uid
 }
 
 export const actions = {
@@ -25,6 +27,7 @@ export const mutations = {
     setUser(state, user) {
         state.status = "loggedIn"
         state.username = user.displayName
+        state.uid = user.uid
     },
     logout(state) {
         state.status = "loggedOut"

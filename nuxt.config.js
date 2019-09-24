@@ -3,6 +3,9 @@ import pkg from './package'
 
 export default {
   mode: 'spa',
+  server: {
+    port: 5000, // デフォルト: 3000
+  },
 
   /*
   ** Headers of the page
@@ -60,15 +63,13 @@ export default {
   ** Axios module configuration
   */
   axios: {
-    // See https://github.com/nuxt-community/axios-module#options
-    baseURL: 'https://accounts.spotify.com',
     proxyHeaders: false,
     credentials: false
   },
   proxy: {
-    '/account_spotify/': { target: 'https://accounts.spotify.com', pathRewrite: {'^/account_spotify/': ''} },
-    '/api_spotify/': { target: 'https://api.spotify.com', pathRewrite: {'^/api_spotify/': ''} },
-    changeOrigin: true
+    // '/account_spotify/': { target: 'https://accounts.spotify.com', pathRewrite: {'^/account_spotify/': ''} },
+    // '/api_spotify/': { target: 'https://api.spotify.com', pathRewrite: {'^/api_spotify/': ''} },
+    // changeOrigin: true
   },
   router: {
     middleware: ['authenticated']

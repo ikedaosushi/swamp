@@ -5,6 +5,7 @@
 
 <script>
 import axios from 'axios'
+import { setTimeout } from 'timers'
 
 const HOST = process.env.HOST
 const ACCOUNT_SPOTIFY_BASE = process.env.ACCOUNT_SPOTIFY_BASE
@@ -15,19 +16,23 @@ const REDIRECT_URI = `${HOST}/spotify/callback`
 export default {
   created() {
     const code = this.$nuxt.$route.query.code
-    let params = new URLSearchParams()
-    params.append('code', code)
-    params.append('redirect_uri', REDIRECT_URI)
-    params.append('grant_type', 'authorization_code')
-    let options = {
-      headers: {
-        withCredentials: true,
-        Authorization: 'Basic ' + new Buffer(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64'),
-      }
+    const basic = new Buffer(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64')
+    const headers = {
+      Authorization: `Basic ${basic}`
     }
-
-    const url = ACCOUNT_SPOTIFY_BASE + '/api/token'
-    axios.post(url, params, options).then(resp => {
+    const params = {
+      code: code,
+      redirect_uri: REDIRECT_URI,
+      grant_type: 'authorization_code'
+    }
+    const url = 'https://us-central1-swamp-ab541.cloudfunctions.net/api/spotify/api/token'
+    // const url = ACCOUNT_SPOTIFY_BASE + '/api/token'
+    axios({
+      method: 'GET',
+      url: url,
+      params: params,
+      headers: headers
+    }).then(resp => {
       const accessToken = resp.data.access_token
       const refreshToken = resp.data.refresh_token
       localStorage.setItem('spotifyAccessToken', accessToken)

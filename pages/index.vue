@@ -1,7 +1,7 @@
 <template lang="pug">
   div
     spotify-auth(v-if="!isLoggedIn")
-    v-layout(column, justify-center, align-center)
+    v-layout(column, justify-center, align-center v-if="!hasArtist")
       v-flex(xs12, sm8, md6)
         v-btn(@click="fetch") Reload Artist
     v-data-table(
@@ -13,11 +13,11 @@
         :rows-per-page-items="[50, 100]"
     )
       template(v-slot:items="props")
-          td.text-xs-center
-            img(:src="props.item.images[2].url" height="100px")
-          td.text-xs-right {{ props.item.name }}
-          td.text-xs-right {{ props.item.popularity }}
-          td.text-xs-right {{ props.item.genres }}
+          td
+            v-img(width=100 :src="props.item.images[2].url")
+          td.text-md-center.body-1 {{ props.item.name }}
+          td.text-md-center.body-1.text-capitalize {{ props.item.popularity }}
+          td.text-md-center.body-1.text-capitalize {{ props.item.genres.join(" / ") }}
 </template>
 
 <script>
@@ -38,7 +38,19 @@ export default {
     }
   },
   created() {
-    this.fetch()
+    // this.fetch()
+    this.$store.subscribe((mutation, state) => {
+      switch(mutation.type) {
+        case "auth/setUser":
+          console.log("got user")
+          this.getToken()
+          break
+        case "spotify/setToken":
+          console.log("got token")
+          this.fetch()
+          break
+      }
+    })
   },
   components: {
     SpotifyAuth
@@ -47,9 +59,11 @@ export default {
     ...mapState('spotify', ['token']),
     ...mapState('artist', ['artists']),
     ...mapGetters('spotify', ['isLoggedIn']),
+    ...mapGetters('artist', ['hasArtist']),
   },
   methods: {
-    ...mapActions("artist", ["fetch"])
+    ...mapActions("artist", ["fetch"]),
+    ...mapActions("spotify", ["getToken"])
   }
 }
 </script>

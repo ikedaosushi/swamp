@@ -1,5 +1,6 @@
 <template lang="pug">
   v-toolbar
+    v-img(max-width=40 src="/swamp.png")
     v-toolbar-title(v-text='title')
     v-spacer
     v-toolbar-items.hidden-sm-and-down
